@@ -10,12 +10,14 @@
 
 #define LOG_DEBUG(...) ft::log << ft::Logger::Level::DEBUG << __PRETTY_FUNCTION__ << ":" << __LINE__ << ": " << __VA_ARGS__ << std::endl
 
-namespace ft {
+namespace ft
+{
 
 	/**
 	 * @brief A class that represents a file.
 	*/
-	class File: public std::ofstream {
+	class File: public std::ofstream
+	{
 
 	public:
 
@@ -26,8 +28,10 @@ namespace ft {
 		 * 
 		 * @throw std::runtime_error if the file could not be opened.
 		*/
-		File(const std::filesystem::path & p_path): std::ofstream(p_path) {
-			if (!is_open()) {
+		File(const std::filesystem::path & p_path): std::ofstream(p_path)
+		{
+			if (!is_open())
+			{
 				throw std::runtime_error("Could not open log file: " + p_path.string());
 			}
 		}
@@ -37,20 +41,23 @@ namespace ft {
 		/**
 		 * @brief Destroy the File object and close the file.
 		*/
-		~File() {
+		~File()
+		{
 			close();
 		}
 
 	};
 
-	class LogLevel {
+	class LogLevel
+	{
 
 	public:
 
 		/**
 		 * @brief The different levels of logging.
 		*/
-		enum class Value {
+		enum class Value
+		{
 			DEBUG = 0,
 			INFO,
 			WARNING,
@@ -66,7 +73,8 @@ namespace ft {
 		/**
 		 * @brief A map of the different levels of logging to their string representations.
 		*/
-		inline static std::string const levelToString[5] = {
+		inline static std::string const levelToString[5] =
+		{
 			"DEBUG   :",
 			"INFO    :",
 			"WARNING :",
@@ -77,7 +85,8 @@ namespace ft {
 		/**
 		 * @brief A map of the different levels of logging to their color codes.
 		*/
-		inline static std::string const levelToColor[5] = {
+		inline static std::string const levelToColor[5] =
+		{
 			"\x1b[34m",
 			"\x1b[32m",
 			"\x1b[33m",
@@ -94,7 +103,8 @@ namespace ft {
 	/**
 	 * @brief A class for logging messages to the console and to files.
 	*/
-	class Logger {
+	class Logger
+	{
 
 	public:
 
@@ -116,9 +126,11 @@ namespace ft {
 		/**
 		 * @brief Flush the stringstream buffer to the console and to the appropriates log files.
 		*/
-		void _flush() {
+		void _flush()
+		{
 
-			if (_currentMsg.str().empty()) {
+			if (_currentMsg.str().empty())
+			{
 				return;
 			}
 			_writeToConsole(_currentMsg.str());
@@ -130,15 +142,18 @@ namespace ft {
 		/**
 		 * @brief Return the appropriate log file for the message level.
 		*/
-		File & _logFile(Level p_level) const {
+		File & _logFile(Level p_level) const
+		{
 			return *_logFiles[static_cast<int>(p_level)].get();
 		}
 
 		/**
 		 * @brief Write the message level to the console if the message level is greater than or equal to the minimum console level.
 		*/
-		void _writeToConsole(std::string const & p_message) {
-			if (_nextMsgLevel >= _minConsoleLevel) {
+		void _writeToConsole(std::string const & p_message)
+		{
+			if (_nextMsgLevel >= _minConsoleLevel)
+			{
 				std::cout << _timestamp() << _levelHeader(_nextMsgLevel) << p_message << std::endl;
 			}
 		}
@@ -146,10 +161,12 @@ namespace ft {
 		/**
 		 * @brief Write the message level to the appropriate log file.
 		*/
-		void _writeToFile(std::string const & p_message) {
+		void _writeToFile(std::string const & p_message)
+		{
 
 			std::string finalMessage = _timestamp() + _levelHeader(_nextMsgLevel, false) + p_message;
-			switch (_nextMsgLevel) {
+			switch (_nextMsgLevel)
+			{
 				case LogLevel::Value::CRITICAL:
 					_logFile(LogLevel::Value::CRITICAL) << finalMessage << std::endl;
 				case LogLevel::Value::ERROR:
@@ -166,7 +183,8 @@ namespace ft {
 		/**
 		 * @brief Return the header for the message level.
 		*/
-		std::string _levelHeader(Level p_level, bool p_color = true) {
+		std::string _levelHeader(Level p_level, bool p_color = true)
+		{
 			std::stringstream ss;
 			ss << (p_color ? LogLevel::levelToColor[static_cast<int>(p_level)] : "")
 				<< LogLevel::levelToString[static_cast<int>(p_level)]
@@ -177,8 +195,10 @@ namespace ft {
 		/**
 		 * @brief Return the current timestamp.
 		*/
-		std::string _timestamp() {
-			if (!_timestampEnabled) {
+		std::string _timestamp()
+		{
+			if (!_timestampEnabled)
+			{
 				return "";
 			}
 			std::time_t t = std::time(nullptr);
@@ -193,8 +213,10 @@ namespace ft {
 		 * 
 		 * @throw std::runtime_error if the logger is not initialized.
 		*/
-		void _checkIfInitialized() {
-			if (!_fileInitialized) {
+		void _checkIfInitialized()
+		{
+			if (!_fileInitialized)
+			{
 				throw std::runtime_error("Logger not initialized. Call Logger::configureFile() before using the logger.");
 			}
 		}
@@ -213,7 +235,8 @@ namespace ft {
 		 * 
 		 * @throw std::runtime_error if a log file could not be opened.
 		*/
-		Logger(const std::filesystem::path & p_path) {
+		Logger(const std::filesystem::path & p_path)
+		{
 			configureFile(p_path);
 		}
 
@@ -224,7 +247,8 @@ namespace ft {
 		 * 
 		 * @throw std::runtime_error if a log file could not be opened.
 		*/
-		void configureFile(const std::filesystem::path & p_path) {
+		void configureFile(const std::filesystem::path & p_path)
+		{
 			_logFiles[0] = std::make_unique<File>(p_path.string() + "/debug.log");
 			_logFiles[1] = std::make_unique<File>(p_path.string() + "/info.log");
 			_logFiles[2] = std::make_unique<File>(p_path.string() + "/warning.log");
@@ -238,14 +262,16 @@ namespace ft {
 		 * 
 		 * @param p_level The level to set.
 		*/
-		void setLevel(Level p_level) {
+		void setLevel(Level p_level)
+		{
 			_minConsoleLevel = p_level;
 		}
 
 		/**
 		 * @brief Return the minimum level of messages to log to the console.
 		*/
-		Level level() const {
+		Level level() const
+		{
 			return _minConsoleLevel;
 		}
 
@@ -254,7 +280,8 @@ namespace ft {
 		 * 
 		 * @param p_enabled Whether or not to enable timestamps.
 		*/
-		void setTimestamp(bool p_enabled) {
+		void setTimestamp(bool p_enabled)
+		{
 			_timestampEnabled = p_enabled;
 		}
 
@@ -265,9 +292,11 @@ namespace ft {
 		 * 
 		 * @throw std::runtime_error if a message is currently being logged.
 		*/
-		Logger & operator<<(Level p_level) {
+		Logger & operator<<(Level p_level)
+		{
 
-			if (!_currentMsg.str().empty()) {
+			if (!_currentMsg.str().empty())
+			{
 				throw std::runtime_error("Cannot change message level while a message is being logged. Please flush the message first with std::endl.");
 			}
 
@@ -280,12 +309,15 @@ namespace ft {
 		 * 
 		 * @param p_manipulator The manipulator to transfer.
 		*/
-		Logger & operator<<(std::ostream & (*p_manipulator)(std::ostream &)) {
+		Logger & operator<<(std::ostream & (*p_manipulator)(std::ostream &))
+		{
 
-			if (p_manipulator == static_cast<std::ostream & (*)(std::ostream &)>(std::endl)) {
+			if (p_manipulator == static_cast<std::ostream & (*)(std::ostream &)>(std::endl))
+			{
 				_flush();
 			}
-			else {
+			else
+			{
 				_currentMsg << p_manipulator;
 			}
 
@@ -296,7 +328,8 @@ namespace ft {
 		 * @brief Transfer a argument to the stringstream buffer waiting to be flushed.
 		*/
 		template <typename T>
-		Logger & operator<<(T const & p_arg) {
+		Logger & operator<<(T const & p_arg)
+		{
 
 			_currentMsg << p_arg;
 			return *this;
