@@ -1,6 +1,8 @@
 #include "application.hpp"
 #include "logger.hpp"
 
+#include <glm/glm.hpp>
+
 namespace ft
 {
 	Application::Application()

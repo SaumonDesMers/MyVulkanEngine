@@ -9,3 +9,6 @@ MyVulkanEngine
 
 # vscode
 .vscode/*
+
+# external libs
+external/glm
