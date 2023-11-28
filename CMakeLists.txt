@@ -9,9 +9,17 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -Wextra -Werror")
 
 set(SOURCE_FILE
 	"src/main.cpp"
+	"src/application/application.cpp"
 	"src/iostream/logger.cpp"
 )
 
 add_executable(MyVulkanEngine ${SOURCE_FILE})
 
 target_link_libraries(MyVulkanEngine glfw vulkan dl pthread X11 Xxf86vm Xrandr Xi)
+
+target_include_directories(MyVulkanEngine PUBLIC
+	"${PROJECT_BINARY_DIR}"
+	"${PROJECT_SOURCE_DIR}/src"
+	"${PROJECT_SOURCE_DIR}/src/application"
+	"${PROJECT_SOURCE_DIR}/src/iostream"
+)

@@ -6,3 +6,6 @@ Makefile
 
 # target
 MyVulkanEngine
+
+# vscode
+.vscode/*

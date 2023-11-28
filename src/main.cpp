@@ -1,11 +1,23 @@
 #include <vulkan/vulkan.h>
 
-#include <iostream>
+#include "application.hpp"
+#include "logger.hpp"
 
-#include "iostream/logger.hpp"
+#include <stdexcept>
 
 int main()
 {
-	ft::log.setTimestamp(false);
-	return 0;
+	try
+	{
+		ft::Application app;
+
+		app.run();
+	}
+	catch(const std::exception& e)
+	{
+		ft::log << ft::Logger::Level::ERROR << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
+	
+	return EXIT_SUCCESS;
 }
