@@ -2,8 +2,10 @@
 
 #include <iostream>
 
+#include "iostream/logger.hpp"
+
 int main()
 {
-	std::cout << "Hello, World!" << std::endl;
+	ft::log.setTimestamp(false);
 	return 0;
 }
