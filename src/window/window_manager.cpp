@@ -37,4 +37,9 @@ namespace ft
 	{
 		return m_windows == nullptr || m_windows->shouldClose();
 	}
+
+	const char ** WindowManager::getRequiredInstanceExtensions(uint32_t * count)
+	{
+		return glfwGetRequiredInstanceExtensions(count);
+	}
 }

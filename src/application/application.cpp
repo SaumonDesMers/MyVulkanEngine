@@ -1,5 +1,6 @@
 #include "application.hpp"
 #include "logger.hpp"
+#include "error.hpp"
 
 #include <glm/glm.hpp>
 
@@ -7,6 +8,7 @@ namespace ft
 {
 	Application::Application()
 	{
+		m_instance.getAvailableExtensions();
 	}
 
 	Application::~Application()

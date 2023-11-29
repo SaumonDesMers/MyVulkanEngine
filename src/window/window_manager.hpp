@@ -40,6 +40,8 @@ namespace ft
 		*/
 		bool shouldWindowClose() const;
 
+		static const char ** getRequiredInstanceExtensions(uint32_t * count);
+
 	private:
 
 		Window * m_windows = nullptr;
