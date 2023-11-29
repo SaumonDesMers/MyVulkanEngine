@@ -41,6 +41,7 @@ target_include_directories(MyVulkanEngine PUBLIC
 	"${PROJECT_SOURCE_DIR}/src"
 	"${PROJECT_SOURCE_DIR}/src/application"
 	"${PROJECT_SOURCE_DIR}/src/window"
+	"${PROJECT_SOURCE_DIR}/src/error"
 	"${PROJECT_SOURCE_DIR}/src/iostream"
 	"${EXTERNAL_INSTALL_LOCATION}/glm"
 )
