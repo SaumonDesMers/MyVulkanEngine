@@ -7,6 +7,8 @@
 
 int main()
 {
+	ft::log.setTimestamp(false);
+	
 	try
 	{
 		ft::Application app;

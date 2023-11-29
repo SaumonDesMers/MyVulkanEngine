@@ -1,5 +1,7 @@
 #pragma once
 
+#include "window_manager.hpp"
+
 namespace ft
 {
 	class Application
@@ -9,5 +11,11 @@ namespace ft
 		~Application();
 
 		void run();
+	
+	private:
+
+		WindowManager m_windowManager;
+
+		void mainLoop();
 	};
 }

@@ -27,6 +27,8 @@ endif()
 set(SOURCE_FILE
 	"src/main.cpp"
 	"src/application/application.cpp"
+	"src/window/window_manager.cpp"
+	"src/window/window.cpp"
 	"src/iostream/logger.cpp"
 )
 
@@ -38,6 +40,7 @@ target_include_directories(MyVulkanEngine PUBLIC
 	"${PROJECT_BINARY_DIR}"
 	"${PROJECT_SOURCE_DIR}/src"
 	"${PROJECT_SOURCE_DIR}/src/application"
+	"${PROJECT_SOURCE_DIR}/src/window"
 	"${PROJECT_SOURCE_DIR}/src/iostream"
 	"${EXTERNAL_INSTALL_LOCATION}/glm"
 )

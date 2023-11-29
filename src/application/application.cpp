@@ -7,7 +7,6 @@ namespace ft
 {
 	Application::Application()
 	{
-		log.setTimestamp(false);
 	}
 
 	Application::~Application()
@@ -16,7 +15,17 @@ namespace ft
 
 	void Application::run()
 	{
-		log << "Application::run()" << std::endl;
-		throw std::runtime_error("Application::run() not implemented");
+		m_windowManager.createWindow(800, 600, "MyVulkanEngine");
+		mainLoop();
+	}
+
+	void Application::mainLoop()
+	{
+		while (!m_windowManager.shouldWindowClose())
+		{
+			m_windowManager.pollEvents();
+		}
+
+		LOG_DEBUG("Main loop exited");
 	}
 }

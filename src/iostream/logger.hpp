@@ -8,7 +8,9 @@
 #include <map>
 #include <filesystem>
 
-#define LOG_DEBUG(...) ft::log << ft::Logger::Level::DEBUG << __PRETTY_FUNCTION__ << ":" << __LINE__ << ": " << __VA_ARGS__ << std::endl
+#define LOG_DEBUG_FUNCTION(...) ft::log << ft::Logger::Level::DEBUG << __PRETTY_FUNCTION__ << ":" << __LINE__ << ": " << __VA_ARGS__ << std::endl
+#define LOG_DEBUG(...) ft::log << ft::Logger::Level::DEBUG << __VA_ARGS__ << std::endl
+#define LOG_INFO(...) ft::log << ft::Logger::Level::INFO << __VA_ARGS__ << std::endl
 
 namespace ft
 {
