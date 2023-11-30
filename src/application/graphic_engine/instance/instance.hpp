@@ -24,7 +24,7 @@ namespace ft
 	
 	private:
 
-		VkInstance m_instance;
+		VkInstance m_instance = VK_NULL_HANDLE;
 
 		void init();
 
