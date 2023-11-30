@@ -1,7 +1,7 @@
 #pragma once
 
 #include "window_manager.hpp"
-#include "instance.hpp"
+#include "graphic_engine.hpp"
 
 namespace ft
 {
@@ -16,7 +16,7 @@ namespace ft
 	private:
 
 		WindowManager m_windowManager;
-		Instance m_instance;
+		GraphicEngine m_graphicEngine;
 
 		void mainLoop();
 	};

@@ -26,11 +26,14 @@ endif()
 #sources files
 set(SOURCE_FILE
 	"src/main.cpp"
+	"src/application/graphic_engine/debug/debug_messenger.cpp"
+	"src/application/graphic_engine/instance/instance.cpp"
+	"src/application/graphic_engine/graphic_engine.cpp"
 	"src/application/application.cpp"
-	"src/application/instance/instance.cpp"
+	"src/iostream/logger.cpp"
+	"src/error/error.cpp"
 	"src/window/window_manager.cpp"
 	"src/window/window.cpp"
-	"src/iostream/logger.cpp"
 )
 
 add_executable(MyVulkanEngine ${SOURCE_FILE})
@@ -41,9 +44,11 @@ target_include_directories(MyVulkanEngine PUBLIC
 	"${PROJECT_BINARY_DIR}"
 	"${PROJECT_SOURCE_DIR}/src"
 	"${PROJECT_SOURCE_DIR}/src/application"
-	"${PROJECT_SOURCE_DIR}/src/application/instance"
-	"${PROJECT_SOURCE_DIR}/src/window"
+	"${PROJECT_SOURCE_DIR}/src/application/graphic_engine"
+	"${PROJECT_SOURCE_DIR}/src/application/graphic_engine/debug"
+	"${PROJECT_SOURCE_DIR}/src/application/graphic_engine/instance"
 	"${PROJECT_SOURCE_DIR}/src/error"
 	"${PROJECT_SOURCE_DIR}/src/iostream"
+	"${PROJECT_SOURCE_DIR}/src/window"
 	"${EXTERNAL_INSTALL_LOCATION}/glm"
 )

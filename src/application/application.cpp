@@ -7,8 +7,9 @@
 namespace ft
 {
 	Application::Application()
+		: m_windowManager(),
+		m_graphicEngine()
 	{
-		m_instance.getAvailableExtensions();
 	}
 
 	Application::~Application()
