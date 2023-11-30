@@ -10,4 +10,4 @@
 	if (result != VK_SUCCESS) \
 	{ \
 		throw std::runtime_error(FULL_ERROR_INFO + msg + " [" + string_VkResult(result) + "]"); \
-	} \
+	}

@@ -30,15 +30,15 @@ namespace ft
 		 * 
 		 * @throw std::runtime_error if the file could not be opened.
 		*/
-		File(const std::filesystem::path & p_path): std::ofstream(p_path)
+		File(const std::string& path): std::ofstream(path)
 		{
 			if (!is_open())
 			{
-				throw std::runtime_error("Could not open log file: " + p_path.string());
+				throw std::runtime_error("Could not open log file: " + path);
 			}
 		}
 
-		File(File &&p_other): std::ofstream(std::move(p_other)) {}
+		File(File &&other): std::ofstream(std::move(other)) {}
 
 		/**
 		 * @brief Destroy the File object and close the file.
@@ -144,29 +144,29 @@ namespace ft
 		/**
 		 * @brief Return the appropriate log file for the message level.
 		*/
-		File & _logFile(Level p_level) const
+		File & _logFile(Level level) const
 		{
-			return *_logFiles[static_cast<int>(p_level)].get();
+			return *_logFiles[static_cast<int>(level)].get();
 		}
 
 		/**
 		 * @brief Write the message level to the console if the message level is greater than or equal to the minimum console level.
 		*/
-		void _writeToConsole(std::string const & p_message)
+		void _writeToConsole(std::string const & message)
 		{
 			if (_nextMsgLevel >= _minConsoleLevel)
 			{
-				std::cout << _timestamp() << _levelHeader(_nextMsgLevel) << p_message << std::endl;
+				std::cout << _timestamp() << _levelHeader(_nextMsgLevel) << message << std::endl;
 			}
 		}
 
 		/**
 		 * @brief Write the message level to the appropriate log file.
 		*/
-		void _writeToFile(std::string const & p_message)
+		void _writeToFile(std::string const & message)
 		{
 
-			std::string finalMessage = _timestamp() + _levelHeader(_nextMsgLevel, false) + p_message;
+			std::string finalMessage = _timestamp() + _levelHeader(_nextMsgLevel, false) + message;
 			switch (_nextMsgLevel)
 			{
 				case LogLevel::Value::CRITICAL:
@@ -185,12 +185,12 @@ namespace ft
 		/**
 		 * @brief Return the header for the message level.
 		*/
-		std::string _levelHeader(Level p_level, bool p_color = true)
+		std::string _levelHeader(Level level, bool color = true)
 		{
 			std::stringstream ss;
-			ss << (p_color ? LogLevel::levelToColor[static_cast<int>(p_level)] : "")
-				<< LogLevel::levelToString[static_cast<int>(p_level)]
-				<< (p_color ? "\x1b[0m " : " ");
+			ss << (color ? LogLevel::levelToColor[static_cast<int>(level)] : "")
+				<< LogLevel::levelToString[static_cast<int>(level)]
+				<< (color ? "\x1b[0m " : " ");
 			return ss.str();
 		}
 
@@ -233,40 +233,40 @@ namespace ft
 		/**
 		 * @brief Construct a new Logger object and open 5 different files for logging. If the files exist, they will be overwritten.
 		 * 
-		 * @param p_path The path to the log files.
+		 * @param path The path to the log files.
 		 * 
 		 * @throw std::runtime_error if a log file could not be opened.
 		*/
-		Logger(const std::filesystem::path & p_path)
+		Logger(const std::string& path)
 		{
-			configureFile(p_path);
+			configureFile(path);
 		}
 
 		/**
 		 * @brief Open 5 different files for logging. If the files exist, they will be overwritten.
 		 * 
-		 * @param p_path The path to the log files.
+		 * @param path The path to the log files.
 		 * 
 		 * @throw std::runtime_error if a log file could not be opened.
 		*/
-		void configureFile(const std::filesystem::path & p_path)
+		void configureFile(const std::string& path)
 		{
-			_logFiles[0] = std::make_unique<File>(p_path.string() + "/debug.log");
-			_logFiles[1] = std::make_unique<File>(p_path.string() + "/info.log");
-			_logFiles[2] = std::make_unique<File>(p_path.string() + "/warning.log");
-			_logFiles[3] = std::make_unique<File>(p_path.string() + "/error.log");
-			_logFiles[4] = std::make_unique<File>(p_path.string() + "/critical.log");
+			_logFiles[0] = std::make_unique<File>(path + "/debug.log");
+			_logFiles[1] = std::make_unique<File>(path + "/info.log");
+			_logFiles[2] = std::make_unique<File>(path + "/warning.log");
+			_logFiles[3] = std::make_unique<File>(path + "/error.log");
+			_logFiles[4] = std::make_unique<File>(path + "/critical.log");
 			_fileInitialized = true;
 		}
 
 		/**
 		 * @brief Set the minimum level of messages to log to the console.
 		 * 
-		 * @param p_level The level to set.
+		 * @param level The level to set.
 		*/
-		void setLevel(Level p_level)
+		void setLevel(Level level)
 		{
-			_minConsoleLevel = p_level;
+			_minConsoleLevel = level;
 		}
 
 		/**
@@ -280,21 +280,21 @@ namespace ft
 		/**
 		 * @brief Enable or disable timestamps.
 		 * 
-		 * @param p_enabled Whether or not to enable timestamps.
+		 * @param enabled Whether or not to enable timestamps.
 		*/
-		void setTimestamp(bool p_enabled)
+		void setTimestamp(bool enabled)
 		{
-			_timestampEnabled = p_enabled;
+			_timestampEnabled = enabled;
 		}
 
 		/**
 		 * @brief Set the message level.
 		 * 
-		 * @param p_level The level to set.
+		 * @param level The level to set.
 		 * 
 		 * @throw std::runtime_error if a message is currently being logged.
 		*/
-		Logger & operator<<(Level p_level)
+		Logger & operator<<(Level level)
 		{
 
 			if (!_currentMsg.str().empty())
@@ -302,25 +302,25 @@ namespace ft
 				throw std::runtime_error("Cannot change message level while a message is being logged. Please flush the message first with std::endl.");
 			}
 
-			_nextMsgLevel = p_level;
+			_nextMsgLevel = level;
 			return *this;
 		}
 
 		/**
 		 * @brief Transfer a manipulator to the stringstream buffer waiting to be flushed. If the manipulator is std::endl, the buffer will be flushed.
 		 * 
-		 * @param p_manipulator The manipulator to transfer.
+		 * @param manipulator The manipulator to transfer.
 		*/
-		Logger & operator<<(std::ostream & (*p_manipulator)(std::ostream &))
+		Logger & operator<<(std::ostream & (*manipulator)(std::ostream &))
 		{
 
-			if (p_manipulator == static_cast<std::ostream & (*)(std::ostream &)>(std::endl))
+			if (manipulator == static_cast<std::ostream & (*)(std::ostream &)>(std::endl))
 			{
 				_flush();
 			}
 			else
 			{
-				_currentMsg << p_manipulator;
+				_currentMsg << manipulator;
 			}
 
 			return *this;
@@ -330,10 +330,10 @@ namespace ft
 		 * @brief Transfer a argument to the stringstream buffer waiting to be flushed.
 		*/
 		template <typename T>
-		Logger & operator<<(T const & p_arg)
+		Logger & operator<<(T const & arg)
 		{
 
-			_currentMsg << p_arg;
+			_currentMsg << arg;
 			return *this;
 		}
 
