@@ -23,3 +23,39 @@
 >
 >- **Destruction**
 >	- VkInstance
+
+***
+### VkPhysicalDevice
+
+>- **Construction**
+>	- VkInstance
+>
+>- **Usage**
+>	- None
+>
+>- **Destruction**
+>	- None
+
+***
+### VkDevice
+
+>- **Construction**
+>	- VkPhysicalDevice
+>
+>- **Usage**
+>	- None
+>
+>- **Destruction**
+>	- None
+
+***
+### VkQueue
+
+>- **Construction**
+>	- VkDevice
+>
+>- **Usage**
+>	- None
+>
+>- **Destruction**
+>	- None

@@ -6,16 +6,31 @@
 
 namespace ft
 {
-	struct QueueFamilyIndices
+	class Queue
 	{
-		std::optional<uint32_t> graphicsFamily;
-		std::optional<uint32_t> presentFamily;
-
-		bool isComplete() const
+	
+	public:
+		struct FamilyIndices
 		{
-			return graphicsFamily.has_value() && presentFamily.has_value();
-		}
+			std::optional<uint32_t> graphicsFamily;
+			// std::optional<uint32_t> presentFamily;
 
-		static QueueFamilyIndices find(VkPhysicalDevice);
+			bool isComplete() const
+			{
+				// return graphicsFamily.has_value() && presentFamily.has_value();
+				return graphicsFamily.has_value();
+			}
+
+			static FamilyIndices find(VkPhysicalDevice);
+		};
+
+		Queue(VkDevice, FamilyIndices);
+		~Queue();
+	
+	private:
+
+		VkQueue m_queue;
+
+		void init(VkDevice, FamilyIndices);
 	};
 }

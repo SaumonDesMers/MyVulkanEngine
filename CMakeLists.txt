@@ -27,6 +27,7 @@ endif()
 set(SOURCE_FILE
 	"src/main.cpp"
 	"src/application/graphic_engine/debug/debug_messenger.cpp"
+	"src/application/graphic_engine/logical_device/device.cpp"
 	"src/application/graphic_engine/instance/instance.cpp"
 	"src/application/graphic_engine/physical_device/physical_device.cpp"
 	"src/application/graphic_engine/queue/queue.cpp"
@@ -48,6 +49,7 @@ target_include_directories(MyVulkanEngine PUBLIC
 	"${PROJECT_SOURCE_DIR}/src/application"
 	"${PROJECT_SOURCE_DIR}/src/application/graphic_engine"
 	"${PROJECT_SOURCE_DIR}/src/application/graphic_engine/debug"
+	"${PROJECT_SOURCE_DIR}/src/application/graphic_engine/logical_device"
 	"${PROJECT_SOURCE_DIR}/src/application/graphic_engine/instance"
 	"${PROJECT_SOURCE_DIR}/src/application/graphic_engine/physical_device"
 	"${PROJECT_SOURCE_DIR}/src/application/graphic_engine/queue"

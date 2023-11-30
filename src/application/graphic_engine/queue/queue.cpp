@@ -5,9 +5,23 @@
 
 namespace ft
 {
-	QueueFamilyIndices QueueFamilyIndices::find(VkPhysicalDevice physicalDevice)
+	Queue::Queue(VkDevice device, FamilyIndices indices)
 	{
-		QueueFamilyIndices indices;
+		init(device, indices);
+	}
+
+	Queue::~Queue()
+	{
+	}
+
+	void Queue::init(VkDevice device, FamilyIndices indices)
+	{
+		vkGetDeviceQueue(device, indices.graphicsFamily.value(), 0, &m_queue);
+	}
+
+	Queue::FamilyIndices Queue::FamilyIndices::find(VkPhysicalDevice physicalDevice)
+	{
+		Queue::FamilyIndices indices;
 
 		uint32_t queueFamilyCount = 0;
 		vkGetPhysicalDeviceQueueFamilyProperties(

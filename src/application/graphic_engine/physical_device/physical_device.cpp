@@ -59,7 +59,7 @@ namespace ft
 
 	int PhysicalDevice::rateDeviceSuitability(VkPhysicalDevice device) const
 	{
-		QueueFamilyIndices indices = QueueFamilyIndices::find(device);
+		Queue::FamilyIndices indices = Queue::FamilyIndices::find(device);
 
 		return indices.isComplete() ? 1 : 0;
 	}
