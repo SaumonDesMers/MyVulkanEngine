@@ -5,6 +5,7 @@
 #include "physical_device.hpp"
 #include "device.hpp"
 #include "queue.hpp"
+#include "surface.hpp"
 
 #include <vulkan/vulkan.h>
 
@@ -25,6 +26,7 @@ namespace ft
 
 		Instance m_instance;
 		DebugMessenger m_debugMessenger;
+		Surface m_surface;
 		PhysicalDevice m_physicalDevice;
 		Device m_device;
 		Queue m_graphicsQueue;
