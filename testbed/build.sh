@@ -10,7 +10,7 @@ cFilenames=$(find . -type f -name "*.cpp")
 # echo "Files:" $cFilenames
 
 assembly="testbed"
-compilerFlags="-g -fdeclspec -fPIC" 
+compilerFlags="-g -fdeclspec -fPIC -std=c++17" 
 # -fms-extensions 
 # -Wall -Werror
 includeFlags="-Isrc -I../engine/src/"
