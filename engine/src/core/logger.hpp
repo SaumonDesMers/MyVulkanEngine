@@ -113,7 +113,7 @@ namespace LIB_NAMESPACE
 	/**
 	 * @brief A class for logging messages to the console and to files.
 	*/
-	FT_API class Logger
+	class Logger
 	{
 	
 	public:
@@ -124,7 +124,7 @@ namespace LIB_NAMESPACE
 		/**
 		 * @brief Construct a new Logger object.
 		*/
-		Logger(): _fileInitialized(false) {}
+		Logger(): m_fileInitialized(false) {}
 
 		/**
 		 * @brief Construct a new Logger object and open 5 different files for logging. If the files exist, they will be overwritten.
@@ -147,13 +147,13 @@ namespace LIB_NAMESPACE
 		*/
 		void configure(const std::filesystem::path & path)
 		{
-			_logFiles[0] = std::make_unique<File>(path.string() + "/critical.log");
-			_logFiles[1] = std::make_unique<File>(path.string() + "/error.log");
-			_logFiles[2] = std::make_unique<File>(path.string() + "/warning.log");
-			_logFiles[3] = std::make_unique<File>(path.string() + "/info.log");
-			_logFiles[4] = std::make_unique<File>(path.string() + "/debug.log");
-			_logFiles[5] = std::make_unique<File>(path.string() + "/trace.log");
-			_fileInitialized = true;
+			m_logFiles[0] = std::make_unique<File>(path.string() + "/critical.log");
+			m_logFiles[1] = std::make_unique<File>(path.string() + "/error.log");
+			m_logFiles[2] = std::make_unique<File>(path.string() + "/warning.log");
+			m_logFiles[3] = std::make_unique<File>(path.string() + "/info.log");
+			m_logFiles[4] = std::make_unique<File>(path.string() + "/debug.log");
+			m_logFiles[5] = std::make_unique<File>(path.string() + "/trace.log");
+			m_fileInitialized = true;
 		}
 
 		/**
@@ -163,7 +163,7 @@ namespace LIB_NAMESPACE
 		*/
 		void setLevel(Level level)
 		{
-			_minConsoleLevel = level;
+			m_minConsoleLevel = level;
 		}
 
 		/**
@@ -171,7 +171,7 @@ namespace LIB_NAMESPACE
 		*/
 		Level level() const
 		{
-			return _minConsoleLevel;
+			return m_minConsoleLevel;
 		}
 
 		/**
@@ -181,7 +181,7 @@ namespace LIB_NAMESPACE
 		*/
 		void setTimestamp(bool enabled)
 		{
-			_timestampEnabled = enabled;
+			m_timestampEnabled = enabled;
 		}
 
 		/**
@@ -193,12 +193,12 @@ namespace LIB_NAMESPACE
 		*/
 		Logger & operator<<(Level level)
 		{
-			if (!_currentMsg.str().empty())
+			if (!m_currentMsg.str().empty())
 			{
 				std::runtime_error("Cannot change message level while a message is being logged. Please flush the message first with std::endl.");
 			}
 
-			_nextMsgLevel = level;
+			m_nextMsgLevel = level;
 			return *this;
 		}
 
@@ -207,15 +207,15 @@ namespace LIB_NAMESPACE
 		 * 
 		 * @param manipulator The manipulator to transfer.
 		*/
-		Logger & operator<<(std::wostream & (*manipulator)(std::wostream &))
+		Logger & operator<<(std::ostream & (*manipulator)(std::ostream &))
 		{
-			if (manipulator == static_cast<std::wostream & (*)(std::wostream &)>(std::endl))
+			if (manipulator == static_cast<std::ostream & (*)(std::ostream &)>(std::endl))
 			{
 				_flush();
 			}
 			else
 			{
-				_currentMsg << manipulator;
+				m_currentMsg << manipulator;
 			}
 
 			return *this;
@@ -227,21 +227,21 @@ namespace LIB_NAMESPACE
 		template <typename T>
 		Logger & operator<<(T const & arg)
 		{
-			_currentMsg << arg;
+			m_currentMsg << arg;
 			return *this;
 		}
 	
 	private:
 
-		bool _fileInitialized = false;
+		bool m_fileInitialized = false;
 
-		std::stringstream _currentMsg;
+		std::stringstream m_currentMsg;
 
-		std::unique_ptr<File> _logFiles[static_cast<int>(LogLevel::Value::MAX)];
-		LogLevel::Value _minConsoleLevel = LogLevel::Value::TRACE;
-		LogLevel::Value _nextMsgLevel = LogLevel::Value::INFO;
+		std::unique_ptr<File> m_logFiles[static_cast<int>(LogLevel::Value::MAX)];
+		LogLevel::Value m_minConsoleLevel = LogLevel::Value::TRACE;
+		LogLevel::Value m_nextMsgLevel = LogLevel::Value::INFO;
 
-		bool _timestampEnabled = true;
+		bool m_timestampEnabled = true;
 
 
 		/**
@@ -249,14 +249,14 @@ namespace LIB_NAMESPACE
 		*/
 		void _flush()
 		{
-			if (_currentMsg.str().empty())
+			if (m_currentMsg.str().empty())
 			{
 				return;
 			}
-			_writeToConsole(_currentMsg.str());
-			if (_fileInitialized)
-				_writeToFile(_currentMsg.str());
-			_currentMsg.str("");
+			_writeToConsole(m_currentMsg.str());
+			if (m_fileInitialized)
+				_writeToFile(m_currentMsg.str());
+			m_currentMsg.str("");
 		}
 
 		/**
@@ -264,7 +264,7 @@ namespace LIB_NAMESPACE
 		*/
 		File & _logFile(Level level) const
 		{
-			return *_logFiles[static_cast<int>(level)].get();
+			return *m_logFiles[static_cast<int>(level)].get();
 		}
 
 		/**
@@ -272,9 +272,9 @@ namespace LIB_NAMESPACE
 		*/
 		void _writeToConsole(std::string const & message)
 		{
-			if (_nextMsgLevel <= _minConsoleLevel)
+			if (m_nextMsgLevel <= m_minConsoleLevel)
 			{
-				std::cout << _timestamp() << _levelHeader(_nextMsgLevel) << message << std::endl;
+				std::cout << _timestamp() << _levelHeader(m_nextMsgLevel) << message << std::endl;
 			}
 		}
 
@@ -284,8 +284,8 @@ namespace LIB_NAMESPACE
 		void _writeToFile(std::string const & message)
 		{
 
-			std::string finalMessage = _timestamp() + _levelHeader(_nextMsgLevel, false) + message;
-			switch (_nextMsgLevel)
+			std::string finalMessage = _timestamp() + _levelHeader(m_nextMsgLevel, false) + message;
+			switch (m_nextMsgLevel)
 			{
 				case LogLevel::Value::CRITICAL:
 					_logFile(LogLevel::Value::CRITICAL) << finalMessage << std::endl;
@@ -321,7 +321,7 @@ namespace LIB_NAMESPACE
 		*/
 		std::string _timestamp()
 		{
-			if (!_timestampEnabled)
+			if (!m_timestampEnabled)
 			{
 				return "";
 			}
